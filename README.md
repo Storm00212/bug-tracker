@@ -285,4 +285,3 @@ Feel free to use, modify, and expand it for learning and collaboration.
 > “Quality is not an act, it is a habit.”
 > — *Aristotle*
 
-```
