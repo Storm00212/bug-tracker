@@ -286,11 +286,3 @@ Feel free to use, modify, and expand it for learning and collaboration.
 > — *Aristotle*
 
 ```
-
----
-
-### ✅ Notes:
-- Includes **middleware documentation and sample code**
-- Reflects your **Agile structure and QA process**
-- Reads professionally for GitHub viewers (clear formatting + emojis)
-- Highlights **Sprint structure** for your QA/QE training workflow
