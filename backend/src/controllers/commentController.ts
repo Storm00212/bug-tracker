@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
-import { addComment, getCommentsByBug } from "../repositories/commentRepository.js";
+import { CommentService } from "../services/commentService.js";
 import { commentSchema } from "../models/Comment.js";
 
 export const addBugComment = async (req: Request, res: Response) => {
   try {
     const parse = commentSchema.safeParse(req.body);
     if (!parse.success) {
-      const errors = parse.error.errors.map(e => e.message).join(", ");
+      const errors = parse.error.issues.map((e: any) => e.message).join(", ");
       return res.status(400).json({ message: errors });
     }
 
-    const comment = await addComment(req.body);
+    const comment = await CommentService.addComment(req.body);
     res.status(201).json({ message: "Comment added successfully", comment });
   } catch (err: any) {
     console.error("Add Comment Error:", err.message);
@@ -21,7 +21,7 @@ export const addBugComment = async (req: Request, res: Response) => {
 export const listBugComments = async (req: Request, res: Response) => {
   try {
     const bugId = Number(req.params.bugId);
-    const comments = await getCommentsByBug(bugId);
+    const comments = await CommentService.getCommentsByBug(bugId);
     res.json({ comments });
   } catch (err: any) {
     console.error("Fetch Comments Error:", err.message);
