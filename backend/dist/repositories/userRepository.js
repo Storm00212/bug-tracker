@@ -1,15 +1,31 @@
+/**
+ * USER REPOSITORY
+ *
+ * Handles direct database operations for User entities.
+ * Repositories contain data access logic and SQL queries.
+ * They provide a clean interface between services and the database.
+ */
 import { getPool } from "../config/db.js";
 import bcrypt from "bcryptjs";
 import { userSchema } from "../models/User.js";
+/**
+ * Create a new user in the database
+ *
+ * Process: Validate → Hash password → Insert → Return result
+ * Handles user registration data persistence
+ */
 export const createUser = async (user) => {
-    // ✅ Validate using Zod
+    // Step 1: Validate user data using Zod schema
     const parsed = userSchema.safeParse(user);
     if (!parsed.success) {
         const errors = parsed.error.issues.map((e) => e.message).join(", ");
         throw new Error(`User validation failed: ${errors}`);
     }
+    // Step 2: Get database connection from pool
     const pool = await getPool();
+    // Step 3: Hash password for secure storage
     const hashedPassword = await bcrypt.hash(user.password, 10);
+    // Step 4: Execute INSERT query with parameterized values
     const result = await pool.request()
         .input("username", user.username)
         .input("email", user.email)
@@ -20,20 +36,36 @@ export const createUser = async (user) => {
       VALUES (@username, @email, @password, @role);
       SELECT SCOPE_IDENTITY() AS id;
     `);
+    // Step 5: Return the newly created user record with generated ID
     return result.recordset[0];
 };
+/**
+ * Find a user by their email address
+ *
+ * Used for login authentication and duplicate email checking
+ * Returns user record or undefined if not found
+ */
 export const findUserByEmail = async (email) => {
     const pool = await getPool();
     const result = await pool.request()
         .input("email", email)
         .query(`SELECT * FROM Users WHERE email = @email`);
-    return result.recordset[0];
+    return result.recordset[0]; // Returns undefined if no user found
 };
+/**
+ * Verify user credentials for login
+ *
+ * Process: Find user → Compare password → Return result
+ * Used by authentication service for login validation
+ */
 export const verifyCredentials = async (email, password) => {
+    // Step 1: Find user by email
     const user = await findUserByEmail(email);
     if (!user)
         return null;
+    // Step 2: Compare provided password with stored hash
     const isValid = await bcrypt.compare(password, user.password);
+    // Step 3: Return user if credentials are valid, null otherwise
     return isValid ? user : null;
 };
 //# sourceMappingURL=userRepository.js.map

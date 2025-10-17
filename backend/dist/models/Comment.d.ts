@@ -1,3 +1,10 @@
+/**
+ * COMMENT MODEL
+ *
+ * Defines the data structure and validation rules for Comment entities.
+ * Comments enable team collaboration by allowing users to discuss bugs,
+ * provide clarifications, and share information during issue resolution.
+ */
 import { z } from "zod";
 export declare const commentSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodNumber>;

@@ -1,3 +1,10 @@
+/**
+ * BUG MODEL
+ *
+ * Defines the data structure and validation rules for Bug entities.
+ * Bugs are the core entities that track software defects throughout their lifecycle.
+ * They contain all information needed to report, track, and resolve issues.
+ */
 import { z } from "zod";
 export declare const bugSchema: z.ZodObject<{
     id: z.ZodOptional<z.ZodNumber>;
