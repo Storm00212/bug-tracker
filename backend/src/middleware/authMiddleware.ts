@@ -17,7 +17,11 @@ export const authMiddleware = (
     }
 
     const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+      throw new Error("JWT_SECRET not configured");
+    }
+    const decoded = (jwt.verify as any)(token, secret!);
 
     req.user = decoded;
     next();
