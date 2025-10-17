@@ -5,9 +5,9 @@ export declare const userSchema: z.ZodObject<{
     email: z.ZodString;
     password: z.ZodString;
     role: z.ZodEnum<{
-        admin: "admin";
-        developer: "developer";
-        tester: "tester";
+        Admin: "Admin";
+        Developer: "Developer";
+        Tester: "Tester";
     }>;
     createdAt: z.ZodOptional<z.ZodDate>;
 }, z.core.$strip>;

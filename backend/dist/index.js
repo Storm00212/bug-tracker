@@ -9,6 +9,7 @@ import authRoutes from "./routes/auth.js";
 import projectRoutes from "./routes/projects.js";
 import bugRoutes from "./routes/bugs.js";
 import commentRoutes from "./routes/comments.js";
+import adminRoutes from "./routes/admin.js";
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -23,6 +24,7 @@ app.use("/auth", authRoutes);
 app.use("/projects", projectRoutes);
 app.use("/bugs", bugRoutes);
 app.use("/comments", commentRoutes);
+app.use("/admin", adminRoutes);
 // Error handling middleware (must be last)
 app.use(errorHandler);
 // Database connection

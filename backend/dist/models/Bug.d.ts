@@ -10,10 +10,10 @@ export declare const bugSchema: z.ZodObject<{
         critical: "critical";
     }>;
     status: z.ZodOptional<z.ZodEnum<{
-        open: "open";
-        "in-progress": "in-progress";
-        resolved: "resolved";
-        closed: "closed";
+        Open: "Open";
+        "In Progress": "In Progress";
+        Resolved: "Resolved";
+        Closed: "Closed";
     }>>;
     reporterId: z.ZodNumber;
     developerId: z.ZodOptional<z.ZodNumber>;
