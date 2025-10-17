@@ -2,6 +2,7 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
@@ -13,8 +14,11 @@
   "license": "ISC",
   "packageManager": "pnpm@10.17.0",
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/jest": "^30.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/mssql": "^9.1.8",
     "@types/node": "^24.8.0",
     "jest": "^30.2.0",
     "supertest": "^7.1.4",
