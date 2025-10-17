@@ -4,7 +4,7 @@ import { bugSchema, Bug } from "../models/Bug.js";
 export const createBug = async (bug: Bug) => {
   const parsed = bugSchema.safeParse(bug);
   if (!parsed.success) {
-    const errors = parsed.error.errors.map(e => e.message).join(", ");
+    const errors = parsed.error.issues.map((e: any) => e.message).join(", ");
     throw new Error(`Bug validation failed: ${errors}`);
   }
 

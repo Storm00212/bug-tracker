@@ -4,7 +4,7 @@ import { projectSchema, Project } from "../models/Project.js";
 export const createProject = async (project: Project) => {
   const parsed = projectSchema.safeParse(project);
   if (!parsed.success) {
-    const errors = parsed.error.errors.map(e => e.message).join(", ");
+    const errors = parsed.error.issues.map((e: any) => e.message).join(", ");
     throw new Error(`Project validation failed: ${errors}`);
   }
 

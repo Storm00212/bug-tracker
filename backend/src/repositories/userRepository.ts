@@ -1,12 +1,13 @@
 import { getPool } from "../config/db.js";
 import bcrypt from "bcryptjs";
-import { userSchema, User } from "../models/User.js";
+import { userSchema } from "../models/User.js";
+import type { User } from "../models/User.js";
 
 export const createUser = async (user: User) => {
   // ✅ Validate using Zod
   const parsed = userSchema.safeParse(user);
   if (!parsed.success) {
-    const errors = parsed.error.errors.map(e => e.message).join(", ");
+    const errors = parsed.error.issues.map((e: any) => e.message).join(", ");
     throw new Error(`User validation failed: ${errors}`);
   }
 
@@ -33,4 +34,12 @@ export const findUserByEmail = async (email: string) => {
     .input("email", email)
     .query(`SELECT * FROM Users WHERE email = @email`);
   return result.recordset[0];
+};
+
+export const verifyCredentials = async (email: string, password: string) => {
+  const user = await findUserByEmail(email);
+  if (!user) return null;
+
+  const isValid = await bcrypt.compare(password, user.password);
+  return isValid ? user : null;
 };

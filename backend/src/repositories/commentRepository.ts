@@ -4,7 +4,7 @@ import { commentSchema, Comment } from "../models/Comment.js";
 export const addComment = async (comment: Comment) => {
   const parsed = commentSchema.safeParse(comment);
   if (!parsed.success) {
-    const errors = parsed.error.errors.map(e => e.message).join(", ");
+    const errors = parsed.error.issues.map((e: any) => e.message).join(", ");
     throw new Error(`Comment validation failed: ${errors}`);
   }
 
