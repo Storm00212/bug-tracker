@@ -52,7 +52,7 @@ export const authMiddleware = (
 
     // Step 5: Verify JWT token and decode payload
     // Payload contains: { id: number, role: string }
-    const decoded = (jwt.verify as any)(token, secret!);
+    const decoded = jwt.verify(token, secret!) as jwt.JwtPayload;
 
     // Step 6: Attach decoded user information to request object
     // This makes user data available in subsequent middleware and controllers
@@ -60,9 +60,20 @@ export const authMiddleware = (
 
     // Step 7: Continue to next middleware or route handler
     next();
-  } catch (err: any) {
+  } catch (err) {
     // Handle JWT verification errors (expired, invalid, malformed tokens)
-    console.error("Authentication Error:", err.message);
-    return res.status(403).json({ message: "Invalid or expired token" });
+    const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+    console.error("Authentication Error:", errorMessage);
+
+    // Provide more specific error messages for different JWT errors
+    if (errorMessage.includes('jwt malformed')) {
+      return res.status(403).json({ message: "Malformed token format" });
+    } else if (errorMessage.includes('jwt expired')) {
+      return res.status(403).json({ message: "Token has expired" });
+    } else if (errorMessage.includes('invalid signature')) {
+      return res.status(403).json({ message: "Invalid token signature" });
+    } else {
+      return res.status(403).json({ message: "Invalid or expired token" });
+    }
   }
 };

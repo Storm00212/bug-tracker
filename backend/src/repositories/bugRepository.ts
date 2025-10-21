@@ -59,3 +59,152 @@ export const getBugsByProject = async (projectId: number) => {
     .query(`SELECT * FROM Bugs WHERE projectId = @projectId ORDER BY createdAt DESC`);
   return result.recordset;
 };
+
+/**
+ * Get a specific bug by ID
+ *
+ * Returns bug with the specified ID or null if not found
+ * Used for bug detail views and updates
+ */
+export const getBugById = async (bugId: number) => {
+  const pool = await getPool();
+  const result = await pool.request()
+    .input("id", bugId)
+    .query(`SELECT * FROM Bugs WHERE id = @id`);
+  return result.recordset[0] || null;
+};
+
+/**
+ * Get all bugs with optional filtering
+ *
+ * Supports filtering by status, severity, reporterId, developerId
+ * Returns bugs ordered by creation date (newest first)
+ * Used for global bug listings with filtering
+ */
+export const getAllBugs = async (filters?: {
+  status?: string;
+  severity?: string;
+  reporterId?: number;
+  developerId?: number;
+}) => {
+  const pool = await getPool();
+  let query = `SELECT * FROM Bugs WHERE 1=1`;
+  const request = pool.request();
+
+  // Add filters dynamically
+  if (filters?.status) {
+    query += ` AND status = @status`;
+    request.input("status", filters.status);
+  }
+
+  if (filters?.severity) {
+    query += ` AND severity = @severity`;
+    request.input("severity", filters.severity);
+  }
+
+  if (filters?.reporterId) {
+    query += ` AND reporterId = @reporterId`;
+    request.input("reporterId", filters.reporterId);
+  }
+
+  if (filters?.developerId) {
+    query += ` AND developerId = @developerId`;
+    request.input("developerId", filters.developerId);
+  }
+
+  query += ` ORDER BY createdAt DESC`;
+
+  const result = await request.query(query);
+  return result.recordset;
+};
+
+/**
+ * Update an existing bug
+ *
+ * Process: Validate → Update → Return result
+ * Developers and Admins can update bugs
+ */
+export const updateBug = async (bugId: number, bugData: Partial<Bug>) => {
+  // Step 1: Get database connection from pool
+  const pool = await getPool();
+
+  // Step 2: Build dynamic UPDATE query based on provided fields
+  const updateFields: string[] = [];
+  const request = pool.request().input("id", bugId);
+
+  if (bugData.status !== undefined) {
+    updateFields.push("status = @status");
+    request.input("status", bugData.status);
+  }
+
+  if (bugData.developerId !== undefined) {
+    updateFields.push("developerId = @developerId");
+    request.input("developerId", bugData.developerId);
+  }
+
+  if (bugData.title !== undefined) {
+    updateFields.push("title = @title");
+    request.input("title", bugData.title);
+  }
+
+  if (bugData.description !== undefined) {
+    updateFields.push("description = @description");
+    request.input("description", bugData.description);
+  }
+
+  if (bugData.severity !== undefined) {
+    updateFields.push("severity = @severity");
+    request.input("severity", bugData.severity);
+  }
+
+  if (updateFields.length === 0) {
+    throw new Error("No fields provided for update");
+  }
+
+  // Step 3: Execute UPDATE query
+  await request.query(`
+    UPDATE Bugs
+    SET ${updateFields.join(", ")}
+    WHERE id = @id
+  `);
+
+  // Step 4: Return the updated bug
+  return await getBugById(bugId);
+};
+
+/**
+ * Delete a bug
+ *
+ * Process: Delete comments first → Delete bug
+ * Only Admin users can delete bugs
+ */
+export const deleteBug = async (bugId: number) => {
+  // Step 1: Get database connection from pool
+  const pool = await getPool();
+
+  // Step 2: Start transaction for atomic operation
+  const transaction = pool.transaction();
+  await transaction.begin();
+
+  try {
+    // Step 3: Delete all comments for this bug
+    await transaction.request()
+      .input("bugId", bugId)
+      .query(`DELETE FROM Comments WHERE bugId = @bugId`);
+
+    // Step 4: Delete the bug
+    const result = await transaction.request()
+      .input("bugId", bugId)
+      .query(`DELETE FROM Bugs WHERE id = @bugId`);
+
+    // Step 5: Commit transaction
+    await transaction.commit();
+
+    // Step 6: Return number of affected rows
+    return result.rowsAffected[0];
+  } catch (error) {
+    // Rollback transaction on error
+    await transaction.rollback();
+    throw error;
+  }
+};
