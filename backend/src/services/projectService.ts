@@ -6,7 +6,7 @@
  * Projects serve as containers for organizing and grouping related bugs.
  */
 
-import { createProject, getAllProjects } from "../repositories/projectRepository.js";
+import { createProject, getAllProjects, getProjectById, updateProject, deleteProject } from "../repositories/projectRepository.js";
 import type { Project } from "../models/Project.js";
 
 export class ProjectService {
@@ -60,15 +60,52 @@ export class ProjectService {
    * - Could check if user has access to this project
    * - Could include additional project details
    * - Could load related data (team members, recent bugs, etc.)
-   *
-   * Note: This is a basic implementation. In production, you'd want
-   * a dedicated repository method for efficient single-project queries.
    */
   static async getProjectById(projectId: number): Promise<Project | null> {
-    // This implementation gets all projects and filters (inefficient for production)
-    // TODO: Add getProjectById method to repository for better performance
+    // Future business logic can be added here:
+    // - Check if user has permission to view this project
+    // - Include computed fields like bug counts, team members
+    // - Load recent activity or project health metrics
 
-    const projects = await getAllProjects();
-    return projects.find(p => p.id === projectId) || null;
+    return await getProjectById(projectId);
+  }
+
+  /**
+   * Update an existing project
+   *
+   * Business Logic:
+   * - Could validate project name uniqueness
+   * - Could check user permissions for project updates
+   * - Could send notifications to team members
+   * - Could create audit log entries
+   */
+  static async updateProject(projectId: number, projectData: Partial<Project>): Promise<Project> {
+    // Future business logic can be added here:
+    // - Validate project name uniqueness across the system
+    // - Check if user has permission to update this project
+    // - Send notifications to relevant team members
+    // - Create audit log entry for project changes
+
+    return await updateProject(projectId, projectData);
+  }
+
+  /**
+   * Delete a project
+   *
+   * Business Logic:
+   * - Could check if project has active bugs
+   * - Could verify user has delete permissions
+   * - Could send notifications to team members
+   * - Could create audit log entries
+   */
+  static async deleteProject(projectId: number): Promise<number> {
+    // Future business logic can be added here:
+    // - Check if project has unresolved bugs
+    // - Verify user has permission to delete projects
+    // - Send notifications to all team members
+    // - Create audit log entry for project deletion
+
+    const result = await deleteProject(projectId);
+    return result || 0;
   }
 }

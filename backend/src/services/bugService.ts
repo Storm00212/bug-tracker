@@ -6,7 +6,7 @@
  * Bugs are the central entities that track issues throughout their lifecycle.
  */
 
-import { createBug, getBugsByProject } from "../repositories/bugRepository.js";
+import { createBug, getBugsByProject, getBugById, getAllBugs, updateBug, deleteBug } from "../repositories/bugRepository.js";
 import type { Bug } from "../models/Bug.js";
 
 export class BugService {
@@ -67,16 +67,78 @@ export class BugService {
    * - Could load related data (comments, attachments, history)
    * - Could include detailed user information
    * - Could track bug view analytics
-   *
-   * Note: This is a placeholder implementation.
-   * In production, you'd want a dedicated repository method for efficient queries.
    */
   static async getBugById(bugId: number): Promise<Bug | null> {
-    // This implementation is inefficient - gets all bugs and filters
-    // TODO: Implement getBugById method in repository for better performance
-    // TODO: Add permission checking
-    // TODO: Include related data (comments, user details, etc.)
+    // Future business logic can be added here:
+    // - Check if user has permission to view this bug
+    // - Include reporter and developer user information
+    // - Load related comments and attachments
+    // - Track bug view analytics
 
-    return null;
+    return await getBugById(bugId);
+  }
+
+  /**
+   * Get all bugs with optional filtering
+   *
+   * Business Logic:
+   * - Could filter bugs based on user permissions
+   * - Could add computed fields (comment counts, time since creation, etc.)
+   * - Could sort bugs by priority, status, or creation date
+   * - Could include user information for reporter/developer
+   */
+  static async getAllBugs(filters?: {
+    status?: string;
+    severity?: string;
+    reporterId?: number;
+    developerId?: number;
+  }): Promise<Bug[]> {
+    // Future business logic can be added here:
+    // - Filter bugs based on user's role and permissions
+    // - Add computed fields like comment count, days open, priority score
+    // - Sort by status, severity, or creation date
+    // - Include reporter and developer user information
+    // - Apply pagination for large bug lists
+
+    return await getAllBugs(filters);
+  }
+
+  /**
+   * Update bug information
+   *
+   * Business Logic:
+   * - Could validate status transitions
+   * - Could check user permissions for specific updates
+   * - Could send notifications to relevant users
+   * - Could create audit log entries
+   */
+  static async updateBug(bugId: number, bugData: Partial<Bug>): Promise<Bug> {
+    // Future business logic can be added here:
+    // - Validate status transitions (e.g., can't go from Resolved to Open)
+    // - Check if user has permission to make this update
+    // - Send notifications to bug reporter and assigned developer
+    // - Create audit log entry for bug changes
+
+    return await updateBug(bugId, bugData);
+  }
+
+  /**
+   * Delete a bug
+   *
+   * Business Logic:
+   * - Could check if user has delete permissions
+   * - Could verify bug is in appropriate state for deletion
+   * - Could send notifications to team members
+   * - Could create audit log entries
+   */
+  static async deleteBug(bugId: number): Promise<number> {
+    // Future business logic can be added here:
+    // - Check if user has permission to delete bugs
+    // - Verify bug is in appropriate state (not critical unresolved bugs)
+    // - Send notifications to bug reporter and assigned developer
+    // - Create audit log entry for bug deletion
+
+    const result = await deleteBug(bugId);
+    return result || 0;
   }
 }

@@ -6,7 +6,7 @@
  */
 
 import { Router } from "express";
-import { addProject, listProjects } from "../controllers/projectController.js";
+import { addProject, listProjects, getProject, updateProject, deleteProject } from "../controllers/projectController.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 import { authorizeRoles } from "../middleware/roleMiddleware.js";
 
@@ -40,12 +40,8 @@ router.get("/", authMiddleware, listProjects);
  * Params: id (project ID)
  * Returns: { project: {...} }
  * Protected: Requires authentication
- * Status: Not implemented yet (placeholder)
  */
-router.get("/:id", authMiddleware, async (req, res) => {
-  // TODO: Implement get single project controller
-  res.status(501).json({ message: "Get single project not implemented yet" });
-});
+router.get("/:id", authMiddleware, getProject);
 
 /**
  * PUT /projects/:id
@@ -56,12 +52,8 @@ router.get("/:id", authMiddleware, async (req, res) => {
  * Returns: { message, project }
  * Requires: Admin role
  * Protected: Requires authentication
- * Status: Not implemented yet (placeholder)
  */
-router.put("/:id", authMiddleware, authorizeRoles("Admin"), async (req, res) => {
-  // TODO: Implement update project controller
-  res.status(501).json({ message: "Update project not implemented yet" });
-});
+router.put("/:id", authMiddleware, authorizeRoles("Admin"), updateProject);
 
 /**
  * DELETE /projects/:id
@@ -71,12 +63,8 @@ router.put("/:id", authMiddleware, authorizeRoles("Admin"), async (req, res) => 
  * Returns: { message }
  * Requires: Admin role
  * Protected: Requires authentication
- * Status: Not implemented yet (placeholder)
  */
-router.delete("/:id", authMiddleware, authorizeRoles("Admin"), async (req, res) => {
-  // TODO: Implement delete project controller
-  res.status(501).json({ message: "Delete project not implemented yet" });
-});
+router.delete("/:id", authMiddleware, authorizeRoles("Admin"), deleteProject);
 
 // Export router for mounting in main application
 export default router;

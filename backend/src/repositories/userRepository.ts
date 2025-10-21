@@ -78,3 +78,54 @@ export const verifyCredentials = async (email: string, password: string) => {
   // Step 3: Return user if credentials are valid, null otherwise
   return isValid ? user : null;
 };
+
+/**
+ * Get all users in the system
+ *
+ * Returns all users ordered by creation date
+ * Used for admin user management
+ */
+export const getAllUsers = async () => {
+  const pool = await getPool();
+  const result = await pool.request().query(`SELECT id, username, email, role, createdAt FROM Users ORDER BY createdAt DESC`);
+  return result.recordset;
+};
+
+/**
+ * Update a user's role
+ *
+ * Process: Validate role → Update → Return result
+ * Only Admin users can update user roles
+ */
+export const updateUserRole = async (userId: number, newRole: string) => {
+  // Validate role
+  const validRoles = ["Admin", "Developer", "Tester"];
+  if (!validRoles.includes(newRole)) {
+    throw new Error(`Invalid role. Must be one of: ${validRoles.join(", ")}`);
+  }
+
+  // Step 1: Get database connection from pool
+  const pool = await getPool();
+
+  // Step 2: Execute UPDATE query
+  await pool.request()
+    .input("id", userId)
+    .input("role", newRole)
+    .query(`UPDATE Users SET role = @role WHERE id = @id`);
+
+  // Step 3: Return the updated user
+  return await findUserById(userId);
+};
+
+/**
+ * Get a user by ID (internal use)
+ *
+ * Returns user record without password
+ */
+const findUserById = async (userId: number) => {
+  const pool = await getPool();
+  const result = await pool.request()
+    .input("id", userId)
+    .query(`SELECT id, username, email, role, createdAt FROM Users WHERE id = @id`);
+  return result.recordset[0] || null;
+};
