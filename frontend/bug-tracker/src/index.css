@@ -3,20 +3,305 @@
 @tailwind components;
 @tailwind utilities;
 
-
+/* Dark Tech Theme Variables */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #111111;
+  --bg-tertiary: #1a1a1a;
+  --bg-accent: #2a2a2a;
+
+  --text-primary: #ffffff;
+  --text-secondary: #e0e0e0;
+  --text-muted: #a0a0a0;
+
+  --accent-primary: #00d4ff;
+  --accent-secondary: #00ff88;
+  --accent-tertiary: #ff6b00;
+
+  --border-color: #333333;
+  --shadow-color: rgba(0, 212, 255, 0.1);
+
+  --glow-primary: 0 0 20px rgba(0, 212, 255, 0.3);
+  --glow-secondary: 0 0 15px rgba(0, 255, 136, 0.2);
+  --glow-hover: 0 0 30px rgba(0, 212, 255, 0.5);
+}
+
+/* Dark Tech Theme */
+[data-theme="dark-tech"] {
+  --tw-ring-color: rgba(0, 212, 255, 0.5);
+  --tw-ring-offset-color: #0a0a0a;
+}
+
+[data-theme="dark-tech"] .bg-base-100 {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+}
+
+[data-theme="dark-tech"] .bg-base-200 {
+  background-color: var(--bg-secondary);
+}
+
+[data-theme="dark-tech"] .bg-base-300 {
+  background-color: var(--bg-tertiary);
+}
+
+[data-theme="dark-tech"] .text-base-content {
+  color: var(--text-primary);
+}
+
+[data-theme="dark-tech"] .text-base-content\/70 {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark-tech"] .text-base-content\/30 {
+  color: var(--text-muted);
+}
+
+/* Glowing Effects */
+.glow-primary {
+  box-shadow: var(--glow-primary);
+  transition: box-shadow 0.3s ease;
+}
+
+.glow-primary:hover {
+  box-shadow: var(--glow-hover);
+}
+
+.glow-secondary {
+  box-shadow: var(--glow-secondary);
+}
+
+/* Interactive Elements */
+.btn-glow {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-accent));
+  border: 1px solid var(--accent-primary);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.btn-glow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-glow:hover::before {
+  left: 100%;
+}
+
+.btn-glow:hover {
+  box-shadow: var(--glow-hover);
+  transform: translateY(-2px);
+}
+
+/* Code-like Elements */
+.code-block {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  color: var(--accent-secondary);
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.code-block .keyword {
+  color: var(--accent-primary);
+}
+
+.code-block .string {
+  color: var(--accent-secondary);
+}
+
+.code-block .comment {
+  color: var(--text-muted);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: var(--glow-primary);
+  }
+  50% {
+    box-shadow: var(--glow-hover);
+  }
+}
+
+@keyframes elastic-scale {
+  0% { transform: scale(1); }
+  20% { transform: scale(1.1); }
+  40% { transform: scale(0.95); }
+  60% { transform: scale(1.05); }
+  80% { transform: scale(0.98); }
+  100% { transform: scale(1); }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s infinite;
+}
+
+.elastic-scale {
+  animation: elastic-scale 0.6s ease-out;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-secondary);
+}
+
+/* Focus States */
+.focus-glow:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent-primary);
+}
+
+/* Gradient Backgrounds */
+.gradient-bg {
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+}
+
+.gradient-accent {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Card Hover Effects */
+.card-hover {
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.card-hover:hover {
+  border-color: var(--accent-primary);
+  box-shadow: var(--glow-primary);
+  transform: translateY(-4px);
+}
+
+/* Input Styling */
+.input-tech {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.input-tech:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.1);
+}
+
+/* Button Variants */
+.btn-tech-primary {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  border: none;
+  color: var(--bg-primary);
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-tech-primary:hover {
+  box-shadow: var(--glow-hover);
+  transform: translateY(-2px);
+}
+
+.btn-tech-outline {
+  background: transparent;
+  border: 1px solid var(--accent-primary);
+  color: var(--accent-primary);
+  transition: all 0.3s ease;
+}
+
+.btn-tech-outline:hover {
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+  box-shadow: var(--glow-primary);
+}
+
+/* Legacy support */
+:root {
+  font-family: 'JetBrains Mono', 'Fira Code', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: dark;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Responsive Design Enhancements */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .grid {
+    gap: 1rem;
+  }
+
+  .card-hover:hover {
+    transform: none; /* Disable hover transform on mobile for better UX */
+  }
+}
+
+@media (max-width: 640px) {
+  .text-3xl {
+    font-size: 1.875rem;
+  }
+
+  .text-xl {
+    font-size: 1.25rem;
+  }
+
+  .p-6 {
+    padding: 1rem;
+  }
+
+  .space-y-6 > * + * {
+    margin-top: 1rem;
+  }
 }
 
 a {
@@ -30,10 +315,9 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  width: 100%;
 }
 
 h1 {
