@@ -65,7 +65,6 @@ PRINT 'Existing tables dropped successfully.';
 -- =========================================
 
 -- Users table (enhanced)
-IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Users' AND xtype='U')
 CREATE TABLE Users (
     id INT IDENTITY(1,1) PRIMARY KEY,
     username NVARCHAR(50) UNIQUE NOT NULL,
@@ -77,7 +76,6 @@ CREATE TABLE Users (
 );
 
 -- Projects table (enhanced)
-IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Projects' AND xtype='U')
 CREATE TABLE Projects (
     id INT IDENTITY(1,1) PRIMARY KEY,
     name NVARCHAR(100) NOT NULL,
@@ -87,10 +85,9 @@ CREATE TABLE Projects (
 );
 
 -- Issues table (replaces Bugs table - comprehensive issue tracking)
-IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Issues' AND xtype='U')
 CREATE TABLE Issues (
     id INT IDENTITY(1,1) PRIMARY KEY,
-    key NVARCHAR(20) UNIQUE, -- e.g., PROJ-123
+    [key] NVARCHAR(20) UNIQUE, -- e.g., PROJ-123 (escaped because 'key' is reserved)
     title NVARCHAR(255) NOT NULL,
     description NVARCHAR(MAX) NOT NULL,
     type NVARCHAR(20) NOT NULL CHECK (type IN ('Bug', 'Task', 'Story', 'Epic', 'Subtask')),
@@ -118,7 +115,6 @@ CREATE TABLE Issues (
 );
 
 -- Comments table (enhanced for issues)
-IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Comments' AND xtype='U')
 CREATE TABLE Comments (
     id INT IDENTITY(1,1) PRIMARY KEY,
     content NVARCHAR(MAX) NOT NULL,
@@ -135,7 +131,6 @@ CREATE TABLE Comments (
 -- =========================================
 
 -- Custom Fields table
-IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='CustomFields' AND xtype='U')
 CREATE TABLE CustomFields (
     id INT IDENTITY(1,1) PRIMARY KEY,
     name NVARCHAR(100) NOT NULL,
@@ -156,7 +151,6 @@ CREATE TABLE CustomFields (
 );
 
 -- Custom Field Values table
-IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='CustomFieldValues' AND xtype='U')
 CREATE TABLE CustomFieldValues (
     id INT IDENTITY(1,1) PRIMARY KEY,
     issueId INT NOT NULL,
@@ -174,7 +168,6 @@ CREATE TABLE CustomFieldValues (
 -- =========================================
 
 -- Workflows table
-IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Workflows' AND xtype='U')
 CREATE TABLE Workflows (
     id INT IDENTITY(1,1) PRIMARY KEY,
     name NVARCHAR(100) NOT NULL,
@@ -189,7 +182,6 @@ CREATE TABLE Workflows (
 );
 
 -- Workflow Steps table (statuses in workflow)
-IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='WorkflowSteps' AND xtype='U')
 CREATE TABLE WorkflowSteps (
     id INT IDENTITY(1,1) PRIMARY KEY,
     workflowId INT NOT NULL,
@@ -203,7 +195,6 @@ CREATE TABLE WorkflowSteps (
 );
 
 -- Workflow Transitions table
-IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='WorkflowTransitions' AND xtype='U')
 CREATE TABLE WorkflowTransitions (
     id INT IDENTITY(1,1) PRIMARY KEY,
     workflowId INT NOT NULL,
@@ -227,7 +218,6 @@ CREATE TABLE WorkflowTransitions (
 -- =========================================
 
 -- Components table (for issue organization)
-IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Components' AND xtype='U')
 CREATE TABLE Components (
     id INT IDENTITY(1,1) PRIMARY KEY,
     name NVARCHAR(100) NOT NULL,
@@ -241,7 +231,6 @@ CREATE TABLE Components (
 );
 
 -- Versions table (for release management)
-IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Versions' AND xtype='U')
 CREATE TABLE Versions (
     id INT IDENTITY(1,1) PRIMARY KEY,
     name NVARCHAR(100) NOT NULL,
@@ -256,7 +245,6 @@ CREATE TABLE Versions (
 );
 
 -- Issue Links table (for linking related issues)
-IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='IssueLinks' AND xtype='U')
 CREATE TABLE IssueLinks (
     id INT IDENTITY(1,1) PRIMARY KEY,
     linkType NVARCHAR(50) NOT NULL, -- 'blocks', 'is blocked by', 'relates to', etc.
@@ -270,7 +258,6 @@ CREATE TABLE IssueLinks (
 );
 
 -- Attachments table
-IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Attachments' AND xtype='U')
 CREATE TABLE Attachments (
     id INT IDENTITY(1,1) PRIMARY KEY,
     filename NVARCHAR(255) NOT NULL,
@@ -286,7 +273,6 @@ CREATE TABLE Attachments (
 );
 
 -- Time Tracking table
-IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='WorkLogs' AND xtype='U')
 CREATE TABLE WorkLogs (
     id INT IDENTITY(1,1) PRIMARY KEY,
     issueId INT NOT NULL,
