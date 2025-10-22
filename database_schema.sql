@@ -389,10 +389,10 @@ INSERT INTO WorkflowSteps (workflowId, name, status, [order], isInitial)
 VALUES (1, 'Open', 'Open', 1, 1);
 
 INSERT INTO WorkflowSteps (workflowId, name, status, [order])
-VALUES (1, 'In Progress', 'In Progress', 2, 0);
+VALUES (1, 'In Progress', 'In Progress', 2);
 
 INSERT INTO WorkflowSteps (workflowId, name, status, [order])
-VALUES (1, 'Resolved', 'Resolved', 3, 0);
+VALUES (1, 'Resolved', 'Resolved', 3);
 
 INSERT INTO WorkflowSteps (workflowId, name, status, [order], isFinal)
 VALUES (1, 'Closed', 'Closed', 4, 1);
