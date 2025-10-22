@@ -22,6 +22,8 @@ import { errorHandler } from "./middleware/errorHandler.js";
 import authRoutes from "./routes/auth.js";
 import projectRoutes from "./routes/projects.js";
 import bugRoutes from "./routes/bugs.js";
+import issueRoutes from "./routes/issues.js";
+import customFieldRoutes from "./routes/customFields.js";
 import commentRoutes from "./routes/comments.js";
 import adminRoutes from "./routes/admin.js";
 
@@ -67,7 +69,13 @@ app.use("/projects", projectRoutes);
 // Bug tracking routes (report, update, query bugs)
 app.use("/bugs", bugRoutes);
 
-// Comment system routes (add comments to bugs)
+// Issue tracking routes (create, update, query issues)
+app.use("/issues", issueRoutes);
+
+// Custom field routes (manage custom fields and values)
+app.use("/custom-fields", customFieldRoutes);
+
+// Comment system routes (add comments to bugs/issues)
 app.use("/comments", commentRoutes);
 
 // Administrative routes (user management, analytics)
