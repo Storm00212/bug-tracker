@@ -252,8 +252,8 @@ CREATE TABLE IssueLinks (
     targetIssueId INT NOT NULL,
     createdBy INT NOT NULL,
     createdAt DATETIME2 DEFAULT GETDATE(),
-    FOREIGN KEY (sourceIssueId) REFERENCES Issues(id) ON DELETE CASCADE,
-    FOREIGN KEY (targetIssueId) REFERENCES Issues(id) ON DELETE CASCADE,
+    FOREIGN KEY (sourceIssueId) REFERENCES Issues(id),
+    FOREIGN KEY (targetIssueId) REFERENCES Issues(id),
     FOREIGN KEY (createdBy) REFERENCES Users(id)
 );
 
