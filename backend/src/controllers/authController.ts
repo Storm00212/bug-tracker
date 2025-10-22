@@ -59,6 +59,11 @@ export const loginUser = async (req: Request, res: Response) => {
     // Extract login credentials from request body
     const { email, password } = req.body;
 
+    // Validate required fields
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
+
     // Step 1: Call service to authenticate user
     const { user, token } = await AuthService.login(email, password);
 

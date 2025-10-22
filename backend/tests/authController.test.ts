@@ -198,7 +198,7 @@ describe('Auth Controller', () => {
       // Verify all response components
       expect(response.body.message).toBe('Login successful');
       expect(response.body.token).toBe(mockToken);
-      expect(response.body.user).toBe(mockUser);
+      expect(response.body.user).toStrictEqual(mockUser);
       expect(mockAuthService.login).toHaveBeenCalledWith(loginData.email, loginData.password);
     });
 
