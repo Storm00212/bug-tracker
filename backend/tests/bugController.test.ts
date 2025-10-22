@@ -107,17 +107,21 @@ describe('Bug Controller', () => {
       const bugData = {
         title: 'Test Bug',
         description: 'This is a test bug',
-        severity: 'High',        // Valid severity level
-        reporterId: 1,           // Who reported the bug
-        projectId: 1,            // Which project the bug belongs to
-        developerId: 2           // Assigned developer
+        type: 'Bug',
+        priority: 'High',
+        status: 'Open',
+        reporterId: 1,
+        projectId: 1,
+        labels: [],
+        components: [],
+        affectsVersions: [],
+        fixVersions: [],
       };
 
       // Expected bug object that service should return
       const mockBug = {
         id: 1,                   // Auto-generated ID
         ...bugData,              // Spread original data
-        status: 'Open',          // Default status for new bugs
         createdAt: new Date()    // Auto-generated timestamp
       };
 
@@ -140,9 +144,14 @@ describe('Bug Controller', () => {
       const invalidData = {
         title: '', // Invalid: empty title
         description: 'Test description',
-        severity: 'Invalid', // Invalid severity
+        type: 'Bug',
+        priority: 'Invalid', // Invalid priority
         reporterId: 1,
-        projectId: 1
+        projectId: 1,
+        labels: [],
+        components: [],
+        affectsVersions: [],
+        fixVersions: [],
       };
 
       const response = await request(app)
@@ -150,7 +159,7 @@ describe('Bug Controller', () => {
         .send(invalidData)
         .expect(400);
 
-      expect(response.body.message).toContain('Bug validation failed');
+      expect(response.body.message).toContain('Bug title must be at least 3 characters');
       expect(mockBugService.createBug).not.toHaveBeenCalled();
     });
 
@@ -158,9 +167,15 @@ describe('Bug Controller', () => {
       const bugData = {
         title: 'Test Bug',
         description: 'This is a test bug',
-        severity: 'High',
+        type: 'Bug',
+        priority: 'High',
+        status: 'Open',
         reporterId: 1,
-        projectId: 1
+        projectId: 1,
+        labels: [],
+        components: [],
+        affectsVersions: [],
+        fixVersions: [],
       };
 
       mockBugService.createBug.mockRejectedValue(new Error('Database error'));
