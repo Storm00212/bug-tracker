@@ -26,6 +26,7 @@ import DashboardPage from './pages/DashboardPage'
 import ProjectsPage from './pages/ProjectsPage'
 import ProjectDetailPage from './pages/ProjectDetailPage'
 import BugsPage from './pages/BugsPage'
+import IssuesPage from './pages/IssuesPage'
 import BugDetailPage from './pages/BugDetailPage'
 import BugFormPage from './pages/BugFormPage'
 import AdminPage from './pages/AdminPage'
@@ -41,7 +42,7 @@ const MainLayout: React.FC = () => {
   const navigationItems = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Projects', href: '/projects', icon: FolderKanban },
-    { name: 'Bugs', href: '/bugs', icon: Bug },
+    { name: 'Issues', href: '/issues', icon: Bug },
     ...(hasRole('Admin') ? [{ name: 'Admin', href: '/admin', icon: Shield }] : []),
   ]
 
@@ -138,9 +139,13 @@ const MainLayout: React.FC = () => {
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/projects/:id" element={<ProjectDetailPage />} />
           <Route path="/bugs" element={<BugsPage />} />
+          <Route path="/issues" element={<IssuesPage />} />
           <Route path="/bugs/new" element={<BugFormPage />} />
+          <Route path="/issues/new" element={<BugFormPage />} />
           <Route path="/bugs/:id" element={<BugDetailPage />} />
+          <Route path="/issues/:id" element={<BugDetailPage />} />
           <Route path="/bugs/:id/edit" element={<BugFormPage />} />
+          <Route path="/issues/:id/edit" element={<BugFormPage />} />
           {hasRole('Admin') && <Route path="/admin" element={<AdminPage />} />}
         </Routes>
       </main>
