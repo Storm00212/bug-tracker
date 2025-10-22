@@ -4,6 +4,61 @@
 -- This script creates all necessary tables for a comprehensive
 -- Jira-like issue tracking system with custom fields, workflows,
 -- and advanced features.
+--
+-- WARNING: This script DROPS existing tables and recreates them.
+-- BACKUP YOUR DATA BEFORE RUNNING THIS SCRIPT!
+
+-- =========================================
+-- 0. CLEANUP EXISTING TABLES
+-- =========================================
+
+-- Drop tables in reverse dependency order to avoid foreign key conflicts
+IF EXISTS (SELECT * FROM sysobjects WHERE name='Comments' AND xtype='U')
+    DROP TABLE Comments;
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='Bugs' AND xtype='U')
+    DROP TABLE Bugs;
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='WorkLogs' AND xtype='U')
+    DROP TABLE WorkLogs;
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='Attachments' AND xtype='U')
+    DROP TABLE Attachments;
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='IssueLinks' AND xtype='U')
+    DROP TABLE IssueLinks;
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='CustomFieldValues' AND xtype='U')
+    DROP TABLE CustomFieldValues;
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='CustomFields' AND xtype='U')
+    DROP TABLE CustomFields;
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='WorkflowTransitions' AND xtype='U')
+    DROP TABLE WorkflowTransitions;
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='WorkflowSteps' AND xtype='U')
+    DROP TABLE WorkflowSteps;
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='Workflows' AND xtype='U')
+    DROP TABLE Workflows;
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='Versions' AND xtype='U')
+    DROP TABLE Versions;
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='Components' AND xtype='U')
+    DROP TABLE Components;
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='Issues' AND xtype='U')
+    DROP TABLE Issues;
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='Projects' AND xtype='U')
+    DROP TABLE Projects;
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='Users' AND xtype='U')
+    DROP TABLE Users;
+
+PRINT 'Existing tables dropped successfully.';
 
 -- =========================================
 -- 1. CORE TABLES (Updated from original)
