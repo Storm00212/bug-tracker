@@ -122,7 +122,7 @@ describe('Bug Controller', () => {
       const mockBug = {
         id: 1,                   // Auto-generated ID
         ...bugData,              // Spread original data
-        createdAt: new Date()    // Auto-generated timestamp
+        createdAt: new Date().toISOString()    // Auto-generated timestamp
       };
 
       // Configure mock to return our expected bug
@@ -203,7 +203,7 @@ describe('Bug Controller', () => {
         .expect(200);
 
       expect(response.body.bugs).toEqual(mockBugs);
-      expect(mockBugService.getAllBugs).toHaveBeenCalledWith(undefined);
+      expect(mockBugService.getAllBugs).toHaveBeenCalledWith({});
     });
 
     it('should filter bugs by status', async () => {

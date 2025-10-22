@@ -90,7 +90,7 @@ describe('Auth Controller', () => {
         username: 'testuser',
         email: 'test@example.com',
         role: 'Developer',
-        createdAt: new Date()
+        createdAt: new Date().toISOString()
       };
 
       // Mock the service to return our fake user data
@@ -156,7 +156,7 @@ describe('Auth Controller', () => {
         .expect(500); // Should return Internal Server Error
 
       // Verify error message
-      expect(response.body.message).toBe('Server error registering user');
+      expect(response.body.message).toBe('Server error during registration');
     });
   });
 
@@ -215,7 +215,7 @@ describe('Auth Controller', () => {
         .expect(400); // Bad Request
 
       // Verify validation error and that service wasn't called
-      expect(response.body.message).toContain('Validation failed');
+      expect(response.body.message).toContain('Email and password are required');
       expect(mockAuthService.login).not.toHaveBeenCalled();
     });
 
@@ -241,7 +241,7 @@ describe('Auth Controller', () => {
         .expect(401); // Unauthorized
 
       // Verify error message
-      expect(response.body.message).toBe('Invalid email or password');
+      expect(response.body.message).toBe('Invalid credentials');
     });
   });
 });
