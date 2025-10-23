@@ -17,6 +17,7 @@ import dotenv from "dotenv";
 import { getPool, closePool } from "./config/db.js";
 import { loggerMiddleware } from "./middleware/loggerMiddleware.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import { apiRateLimiter, authRateLimiter, adminRateLimiter } from "./middleware/rateLimitMiddleware.js";
 
 // Import route modules - each handles a specific domain of the application
 import authRoutes from "./routes/auth.js";
@@ -50,6 +51,9 @@ app.use(express.json());
 
 // Log all incoming requests for debugging and monitoring
 app.use(loggerMiddleware);
+
+// Apply rate limiting to all routes
+app.use(apiRateLimiter);
 
 /**
  * ROUTE CONFIGURATION
