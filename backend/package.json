@@ -10,7 +10,11 @@
     "start": "npm run build && node dist/index.js",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "test:load": "k6 run tests/load-test.js",
+    "test:stress": "k6 run tests/stress-test.js",
+    "test:spike": "k6 run tests/spike-test.js",
+    "test:performance": "npm run test:load && npm run test:stress && npm run test:spike"
   },
   "keywords": [],
   "author": "",
@@ -28,6 +32,7 @@
     "@types/node": "^24.8.0",
     "@types/supertest": "^6.0.3",
     "jest": "^30.2.0",
+    "k6": "^0.0.0",
     "supertest": "^7.1.4",
     "ts-jest": "^29.4.5",
     "tsx": "^4.20.6",
@@ -38,6 +43,7 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "express-rate-limit": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "mssql": "^12.0.0",
     "ts-node": "^10.9.2",
