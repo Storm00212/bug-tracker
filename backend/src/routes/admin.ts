@@ -10,6 +10,7 @@ import { authMiddleware } from "../middleware/authMiddleware.js";
 import { authorizeRoles } from "../middleware/roleMiddleware.js";
 import { getAllUsers, updateUserRole } from "../repositories/userRepository.js";
 import { getPool } from "../config/db.js";
+import { adminRateLimiter } from "../middleware/rateLimitMiddleware.js";
 
 // Create Express router for admin-only endpoints
 const router = Router();
@@ -21,8 +22,9 @@ const router = Router();
  * Returns: { users: [...] }
  * Requires: Admin role
  * Protected: Requires authentication
+ * Rate limited: 20 requests per 15 minutes per IP
  */
-router.get("/users", authMiddleware, authorizeRoles("Admin"), async (req, res) => {
+router.get("/users", authMiddleware, authorizeRoles("Admin"), adminRateLimiter, async (req, res) => {
   try {
     const users = await getAllUsers();
     res.json({ users });
@@ -41,8 +43,9 @@ router.get("/users", authMiddleware, authorizeRoles("Admin"), async (req, res) =
  * Returns: { message, user }
  * Requires: Admin role
  * Protected: Requires authentication
+ * Rate limited: 20 requests per 15 minutes per IP
  */
-router.put("/users/:id/role", authMiddleware, authorizeRoles("Admin"), async (req, res) => {
+router.put("/users/:id/role", authMiddleware, authorizeRoles("Admin"), adminRateLimiter, async (req, res) => {
   try {
     const userId = Number(req.params.id);
     const { role } = req.body;
@@ -70,8 +73,9 @@ router.put("/users/:id/role", authMiddleware, authorizeRoles("Admin"), async (re
  * Returns: { totalUsers, totalProjects, totalBugs, bugsByStatus, ... }
  * Requires: Admin role
  * Protected: Requires authentication
+ * Rate limited: 20 requests per 15 minutes per IP
  */
-router.get("/analytics", authMiddleware, authorizeRoles("Admin"), async (req, res) => {
+router.get("/analytics", authMiddleware, authorizeRoles("Admin"), adminRateLimiter, async (req, res) => {
   try {
     const pool = await getPool();
 
@@ -127,8 +131,9 @@ router.get("/analytics", authMiddleware, authorizeRoles("Admin"), async (req, re
  * Returns: { summary, detailedReport, chartsData }
  * Requires: Admin role
  * Protected: Requires authentication
+ * Rate limited: 20 requests per 15 minutes per IP
  */
-router.get("/reports/bugs", authMiddleware, authorizeRoles("Admin"), async (req, res) => {
+router.get("/reports/bugs", authMiddleware, authorizeRoles("Admin"), adminRateLimiter, async (req, res) => {
   try {
     const pool = await getPool();
     const { startDate, endDate, projectId, status } = req.query;
